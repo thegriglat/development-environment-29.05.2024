@@ -1,21 +1,311 @@
-\section{Usage}\label{sec:usage}
+\section{Создание кластера и сервисов}\label{sec:usage}
 
 \begin{frame}[fragile]{Инициализация кластера}
 
-    \begin{lstlisting}[style=base]
-    $ docker swarm init 
-    \end{lstlisting}
+Docker Swarm необходимо предварительно инициализировать
 
-    \begin{lstlisting}[style=base]
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker @swarm init@
 
 Swarm initialized: current node (r3ozii9s3hhwsv03p79gqzieb) is now a manager.
 
     To add a worker to this swarm, run the following command:
 
-docker swarm join --token @SWMTKN-1-0q5ehdrl1649kfbpkma9ss5s1nlw1wvcmhuj1pcnnqnkquf9b9-8ftp1oriocxj9f50xi90wgj9z 192.168.0.103:2377@
+@docker swarm join --token SWMTKN-1-0q5ehdrl1649kfbpkma9ss5s1nlw1wvcmhuj1pcnnqnkquf9b9-8ftp1oriocxj9f50xi90wgj9z 192.168.0.103:2377@
 
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+\end{lstlisting}
+\end{tcolorbox-code}
 
+Удаление инстанса из кластера
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker @swarm leave@
+\end{lstlisting}
+\end{tcolorbox-code}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Добавление сервисов}
+
+Сначала добавим сервис вручную
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker @service create@ --name=nginx nginx
+
+w6w7uq1rfhug4kmhsrqh4jb3a
+overall progress: 1 out of 1 tasks 
+1/1: running   [==================================================>] 
+verify: Service w6w7uq1rfhug4kmhsrqh4jb3a converged
     \end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service ls
+ID             NAME            MODE         REPLICAS   IMAGE          PORTS
+w6w7uq1rfhug   nginx           replicated   @1/1@        nginx:latest   
+\end{lstlisting}
+\end{tcolorbox-code}
+
+Довольно утомительно выполнять для всех сервисов по-отдельности, не правда ли?
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Docker Swarm и compose файлы}
+
+Compose файлы используются \textbf{только для первичной инициализации кластера}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker @stack deploy@ test -c docker-compose.yml
+Creating network test_default
+Creating service test_nginx
+
+\end{lstlisting}
+\end{tcolorbox-code}
+
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+services:
+    nginx:
+        image: nginx:latest
+        @deploy@:
+            replicas: 3
+            update_config:
+                parallelism: 1
+                failure_action: rollback // pause, continue
+                order: start-first // stop-first
+                delay: 5s
+            endpoint_mode: dnsrr // vip
+\end{lstlisting}
+\end{tcolorbox-code}
+
+Swarm {\color{good} не будет обновлять сервис}, если \textbf{шаблон запуска} не изменился
+
+\end{frame}
+
+\begin{frame}[fragile]{Docker Swarm и compose файлы: одиночные задания}
+
+Часто бывает необходимо запустить контейнер \textbf{один раз} при деплое или обновлении приложений в кластере
+
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+services:
+    job:
+        image: alpine
+        deploy:
+            @mode: global-job@
+    \end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service ls
+ID             NAME         MODE         REPLICAS              IMAGE           PORTS
+qv535u46tsvc   test_job     @global job@   @0/0 (1/1 completed)@   alpine:latest   
+\end{lstlisting}
+\end{tcolorbox-code}
+
+Подходит для выполнения миграций базы данных, создания индексов, очистки кэша и т.д.
+
+\end{frame}
+
+\section{Управление состоянием}\label{sec:management}
+\begin{frame}[fragile]{Управление сервисами }
+
+Основные команды для управление сервисами
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ @docker service@
+
+Usage:  docker service COMMAND
+
+Manage Swarm services
+
+Commands:
+  create      Create a new service
+  @inspect@     Display detailed information on one or more services
+  @logs@        Fetch the logs of a service or task
+  @ls@          List services
+  ps          List the tasks of one or more services
+  rm          Remove one or more services
+  rollback    Revert changes to a service configuration
+  @scale@       Scale one or multiple replicated services
+  @update@      Update a service
+\end{lstlisting}
+\end{tcolorbox-code}
+
+\end{frame}
+
+\begin{frame}[fragile]{Управление сервисами: \texttt{inspect} }
+
+Принимает те же аргументы, что и \texttt{docker inspect}
+
+Выводит информацию о сервисе в JSON формате
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service @inspect@ nginx
+[
+    {
+        "ID": "3uj6ue7i38369edtc9zq86bap",
+        "Version": {
+            "Index": 281
+        },
+        "CreatedAt": "2024-05-25T15:43:13.961333368Z",
+        "UpdatedAt": "2024-05-25T15:43:50.922669814Z",
+        "Spec": {
+            "Name": "nginx",
+...
+\end{lstlisting}
+\end{tcolorbox-code}
+
+В выводе также доступны шаблон запуска (из compose файла) и предыдущая конфигурация
+
+\end{frame}
+
+\begin{frame}[fragile]{Управление сервисами: \texttt{logs} }
+
+Принимает те же аргументы, что и \texttt{docker logs}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service @logs@ nginx
+
+@nginx@.@1@.@l1cmmvdtwgrr@:@home@    | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+@nginx@.@1@.@r1e3g85tg5g9@:@home@    | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+\end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{itemize}
+    \item Сервис: \texttt{nginx}
+    \item Реплика: \texttt{1}
+    \item Идентификатор контейнера: \texttt{r1e3g85tg5g9}
+    \item Инстанс: \texttt{home}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Управление сервисами: \texttt{ls} }
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service ls
+ID             NAME      MODE         REPLICAS   IMAGE           PORTS
+l2dmhictze8d   alpine    replicated   @1/1@        alpine:latest   
+3uj6ue7i3836   nginx     replicated   @3/3@        nginx:latest
+\end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{itemize}
+    \item Идентификатор: \texttt{l2dmhictze8d}
+    \item Сервис: \texttt{nginx}
+    \item Статус: \texttt{replicated}
+    \item Статус реплик: \texttt{3} (успешно запущенных) из 3 (запланированных)
+    \item Образ: \texttt{nginx:latest}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Управление сервисами: \texttt{scale}}
+
+Делается вручную или из compose файла
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service @scale nginx=5@
+nginx scaled to 5
+overall progress: 5 out of 5 tasks 
+1/5: running   [==================================================>] 
+2/5: running   [==================================================>] 
+3/5: running   [==================================================>] 
+4/5: running   [==================================================>] 
+5/5: running   [==================================================>] 
+verify: Service nginx @converged@
+\end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service ls
+ID             NAME            MODE         REPLICAS   IMAGE          PORTS
+w6w7uq1rfhug   nginx           replicated   @5/5@        nginx:latest   
+\end{lstlisting}
+\end{tcolorbox-code}
+
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Управление сервисами: \texttt{update} \texttt{-{}-env-add/rm} }
+
+Типичная задача --- обновление переменные окружения сервиса
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service update @--env-add SOMEVAR=foobar@ nginx
+1/1: running   [==================================================>] 
+verify: Service nginx @converged@
+\end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service inspect nginx
+[{
+    @"Spec"@: {
+        "Name": "nginx",
+        "TaskTemplate": {
+            "ContainerSpec": {
+                "Image": "nginx:latest@sha256:a484...",
+                "Env": [
+                    @"SOMEVAR=foobar"@
+                ],
+...
+\end{lstlisting}
+\end{tcolorbox-code}
+
+\end{frame}
+
+\begin{frame}[fragile]{Управление сервисами: \texttt{update} \texttt{-{}-image} }
+
+Типичная задача --- обновление образа сервиса
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+    $ docker service @update --image=nginx:1.25.5@ nginx
+    1/1: running   [==================================================>] 
+    verify: Service nginx @converged@
+    \end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{tcolorbox-code}
+\begin{lstlisting}[style=base]
+$ docker service inspect nginx
+[{      
+    "Spec": {
+        "TaskTemplate": {
+            "ContainerSpec": {
+                @"Image": "nginx:1.25.5@sha256:a484819eb60211f5299034ac80f6a681b06f89e65866ce91f356ed7c72af059c"@,
+...
+    \end{lstlisting}
+\end{tcolorbox-code}
+
+\begin{itemize}
+    \item Jenkins: \texttt{env.BUILD\_NUMBER}
+    \item Gitlab CI: \texttt{\$CI\_PIPELINE\_IID} и \texttt{\$CI\_COMMIT\_SHA}
+\end{itemize}
+
+Swarm {\color{bad} не будет обновлять сервис}, если образ не изменился
 
 \end{frame}

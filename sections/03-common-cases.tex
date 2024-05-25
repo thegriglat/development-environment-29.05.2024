@@ -1,0 +1,44 @@
+\section{Рекомендации}\label{sec:recomendation}
+\begin{frame}[fragile]{Рекомендации}
+
+    \begin{itemize}
+        \item Первоначальная инициализация
+
+              {\small \texttt{docker stack deploy}}
+
+        \item Добавление сервисов
+
+              \begin{itemize}
+                  \item \texttt{docker stack deploy}
+                  \item \texttt{docker service create}
+              \end{itemize}
+
+        \item Обновление образов
+
+              \begin{itemize}
+                  \item \texttt{docker stack deploy}
+                  \item \texttt{docker service update -{}-image}
+              \end{itemize}
+
+        \item Обновление переменных окружения
+
+              \texttt{docker service update -{}-env-add }
+
+        \item Масштабирование
+
+              \begin{itemize}
+                  \item Вертикальное масштабирование
+
+                        \texttt{docker service scale}
+
+                  \item Горизонтальное масштабирование
+                        \begin{itemize}
+                            \item {\color{gray}\texttt{docker swarm join}}
+                            \item требуется кластер по бизнес-требованиям --- лучше использовать {\color{good}Kubernetes}
+                        \end{itemize}
+              \end{itemize}
+
+
+    \end{itemize}
+
+\end{frame}

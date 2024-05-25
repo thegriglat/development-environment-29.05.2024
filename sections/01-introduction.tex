@@ -1,15 +1,69 @@
-\section{Введение}\label{sec:introduction}
+\section{Деплой приложений}\label{sec:deploy}
 
-\begin{frame}{Введение}
+\begin{frame}{Деплой приложений}
+
+    Что мы хотим от деплоя?
+
+    \begin {itemize}
+    \item \textbf{Простота} \textit{отделение разработчика от DevOps}
     \begin{itemize}
-        \item Контейнеризация
-        \item Docker
-        \item Docker Compose
-        \item Docker Swarm
-        \item Kubernetes (k8s) --- не рассматриваем сегодня
+        \item \textit{Локальная разработка}
+        \item \textit{Администрирование инстансов}
+        \item \textit{Решение проблем}
     \end{itemize}
+
+    \item \textbf{Изолированность} \textit{приложения не влияют друг на друга}
+    \item \textbf{Портабельность} \textit{возможность изменения/замены инстанса}
+    \item \textbf{Управляемость} \textit{управление состоянием}
+    \begin{itemize}
+        \item \textit{Переменные окружения}
+        \item \textit{Управление версиями}
+        \item \textit{Логирование и мониторинг}
+    \end{itemize}
+
+    \item \textbf{Масштабируемость}
+    \begin{itemize}
+        \item \textit{Вертикальное масштабирование}
+        \item \textit{Горизонтальное масштабирование}
+    \end{itemize}
+
+    \end{itemize}
+
 \end{frame}
 
-\begin{frame}{Контейнеризация}
+\begin{frame}{ Эволюция деплоя приложений}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{images/docker.png}
+        \label{fig:evolution}
+    \end{figure}
 
 \end{frame}
+
+
+
+\section{Docker Compose vs Docker Swarm}\label{sec:comparison}
+\begin{frame}{Docker Compose vs Docker Swarm}
+    \begin{table}[]
+        \begin{tabular}{lcc}
+            \multicolumn{1}{c}{\textbf{Качество}}  & \textbf{Docker Compose} & \textbf{Docker Swarm} \\
+            Сложность                              & легко                   & чуть сложнее          \\
+            Поддержка зависимостей между сервисами & \yes                    & \no                   \\
+            Поддержка репликации                   & \no                     & \yes                  \\
+            Поддержка кластеризации                & \no                     & \yes                  \\
+            Прозрачное обновления сервисов         & \no                     & \yes                  \\
+            Балансировщик нагрузки                 & \no                     & \yes                  \\
+            Дополнительные требования к приложению & \no                     & \yes
+        \end{tabular}
+    \end{table}
+
+    Требования Docker Swarm к приложению и деплою:
+    \begin{itemize}
+        \item Обработка недоступности других сервисов (БД, Redis, ...)
+        \item Наличие healthcheck у сервисов
+        \item Обработка сигналов \texttt{SIGTERM}/\texttt{SIGKILL}
+    \end{itemize}
+
+\end{frame}
+

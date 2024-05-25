@@ -1,0 +1,47 @@
+local: "Локальный запуск" {
+  style.border-radius: 19
+  style.fill: lightgray
+}
+vm: "Виртуальные машины (VMware, VirtualBox)" {
+  style.border-radius: 19
+  style.fill: lightgray
+}
+docker: {
+  shape: image
+  icon: docker-logo.png
+}
+compose: "Docker Compose" {
+  shape: image
+  icon: docker-compose-icon.webp
+}
+clusters: "Кластера приложений" {
+  style.border-radius: 19
+  swarm: "Docker Swarm" {
+    shape: image
+    icon: docker-swarm-icon.png
+  }
+  k8s: "Kubernetes" {
+    shape: image
+    icon: kubernetes-icon.webp
+  }
+}
+
+lambda: "Serverless functions" {
+  style.border-radius: 19
+  style.fill: lightgray
+  aws: "AWS Lambda" {
+    shape: image
+    icon: aws-lambda.png
+  }
+  azure: "Azure Functions" {
+    shape: image
+    icon: azure-logo.png
+  }
+}
+
+local -> vm
+local -> docker
+local -> lambda
+
+docker -> compose
+docker -> clusters

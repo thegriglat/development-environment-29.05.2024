@@ -18,18 +18,19 @@
         \usebeamerfont{subtitle}\insertsubtitle\par
 
         \vskip 3em
-        
+
         \usebeamerfont{author}\insertauthor\par
         \usebeamerfont{date}\insertdate\par
         \vskip \@lrmargin
-        
+
     \end{beamercolorbox}
-    
-    % \begin{tikzpicture}[remember picture,overlay,every node/.style={inner sep=0,outer sep=\@lrmargin}]
-    %     \node[anchor=north east] at (current page.north east){
-    %             \includegraphics[width=45mm, height=30mm]{zhawbeamer/zhaw_logo_white.png}
-    %     };
-    % \end{tikzpicture}
+
+    \begin{tikzpicture}[remember picture,overlay,every node/.style={inner sep=0,outer sep=\@lrmargin}]
+        \node[anchor=north east] at (current page.north east){
+            \vspace*{\@lrmargin}
+            \includegraphics[width=22mm, height=15mm]{images/uit-logo.png}
+        };
+    \end{tikzpicture}
 }
 
 %----------------------------------------
@@ -43,11 +44,11 @@
         \vskip 5em
     \end{beamercolorbox}
 
-    % \begin{tikzpicture}[remember picture,overlay,every node/.style={inner sep=\@ftitlemargin,outer sep=0}]
-    %     \node[anchor=north east] at (current page.north east){
-    %             \includegraphics[width=\@ftitleheight-\@ftitlemargin-\@ftitlemargin, height=\@ftitleheight-\@ftitlemargin-\@ftitlemargin]{zhawbeamer/zhaw_logo_blue.png}
-    %     };
-    % \end{tikzpicture}
+    \begin{tikzpicture}[remember picture,overlay,every node/.style={inner sep=\@ftitlemargin,outer sep=0}]
+        \node[anchor=north east] at (current page.north east){
+            \includegraphics[ height=\@ftitleheight-\@ftitlemargin-\@ftitlemargin]{images/uit-logo.png}
+        };
+    \end{tikzpicture}
 }
 
 %----------------------------------------
@@ -67,17 +68,17 @@
     \nointerlineskip
     \begin{beamercolorbox}[wd=\paperwidth, rightskip=\@ftitleheight, leftskip=\@ftitlemargin, ht=\@ftitleheight]{frametitle}
         \vbox to \@ftitleheight{
-        \vfill
-        \usebeamerfont{frametitle}\insertframetitle\par
-        \vfill
+            \vfill
+            \usebeamerfont{frametitle}\insertframetitle\par
+            \vfill
         }
     \end{beamercolorbox}
-    
-    % \begin{tikzpicture}[remember picture,overlay,every node/.style={inner sep=\@ftitlemargin,outer sep=0}]
-    %     \node[anchor=north east] at (current page.north east){
-    %             \includegraphics[width=\@ftitleheight-\@ftitlemargin-\@ftitlemargin , height=\@ftitleheight-\@ftitlemargin-\@ftitlemargin]{zhawbeamer/zhaw_logo_white.png}
-    %     };
-    % \end{tikzpicture}
+
+    \begin{tikzpicture}[remember picture,overlay,every node/.style={inner sep=\@ftitlemargin,outer sep=0}]
+        \node[anchor=north east] at (current page.north east){
+            \includegraphics[ height=\@ftitleheight-\@ftitlemargin-\@ftitlemargin]{images/uit-logo.png}
+        };
+    \end{tikzpicture}
 }
 
 %----------------------------------------

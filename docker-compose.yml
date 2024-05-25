@@ -1,0 +1,15 @@
+services:
+  nginx:
+      image: nginx:latest
+      deploy:
+          replicas: 3
+          update_config:
+              parallelism: 1
+              order: start-first
+              delay: 5s
+              failure_action: rollback
+          endpoint_mode: dnsrr
+  job:
+    image: alpine
+    deploy:
+      mode: global-job

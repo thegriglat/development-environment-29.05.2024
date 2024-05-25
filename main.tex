@@ -19,16 +19,36 @@
 
 \usepackage[T2A]{fontenc}
 \usepackage{listings}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkgray,
+    filecolor=darkgray,      
+    urlcolor=darkgray,
+    pdfpagemode=FullScreen,
+    }
 \lstdefinestyle{base}{
 	language=bash,
 	emptylines=1,
 	breaklines=true,
-	basicstyle=\ttfamily\color{white},
-	moredelim=**[is][\color{red}]{@}{@},
-	backgroundcolor = \color{black},
-	frame=ltb,
-	framerule=0pt,
+	basicstyle=\scriptsize\ttfamily\color{white},
+	moredelim=**[is][\color{orange}]{@}{@},
+	showstringspaces=false
 }
+\newtcolorbox{tcolorbox-code}{
+	colback=zhawBlue,
+	boxsep=1pt,left=2pt,right=2pt,top=0pt,bottom=0pt
+	}
+
+\definecolor{good}{RGB}{47,163,34}
+\definecolor{bad}{RGB}{255,0,0}
+
+
+
+\newcommand{\yes}{{\color{good}Да}}
+\newcommand{\no}{{\color{bad}Нет}}
+
 
 %----------------------------------------
 %   PREAMBLE: PACKAGES AND CONFIGURATIONS
@@ -39,14 +59,13 @@
 %   REPORT INFORMATION
 %----------------------------------------
 
-\title{Системы контейнеризации}
-\subtitle{Docker Swarm}
+\title{Оркестрация приложений с Docker Swarm}
 \author{Латышев Григорий}
 \date{29.05.2024}
 
 % footer
-\lfooter{left footer}
-\mfooter{Umbrella IT}
+\lfooter{Umbrella IT}
+\mfooter{Среда разработки}
 
 %----------------------------------------
 %   TITLEPAGE
@@ -58,6 +77,7 @@
 %   TOC
 %----------------------------------------
 \begin{frame}{Содержание}
+
 	\tableofcontents
 \end{frame}
 
@@ -67,6 +87,7 @@
 
 \input{sections/01-introduction}
 \input{sections/02-usage}
+\input{sections/03-common-cases}
 
 %----------------------------------------
 \end{document}
