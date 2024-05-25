@@ -59,7 +59,7 @@ w6w7uq1rfhug   nginx           replicated   @1/1@        nginx:latest
 
 \begin{frame}[fragile]{Docker Swarm и compose файлы}
 
-Compose файлы используются \textbf{только для первичной инициализации кластера}
+Compose файлы используются \textit{в основном} только для первичной инициализации кластера
 
 \begin{tcolorbox-code}
 \begin{lstlisting}[style=base]
@@ -169,7 +169,7 @@ $ docker service @inspect@ nginx
 \end{lstlisting}
 \end{tcolorbox-code}
 
-В выводе также доступны шаблон запуска (из compose файла) и предыдущая конфигурация
+В выводе также доступны шаблон запуска и предыдущая конфигурация
 
 \end{frame}
 
@@ -182,14 +182,13 @@ $ docker service @inspect@ nginx
 $ docker service @logs@ nginx
 
 @nginx@.@1@.@l1cmmvdtwgrr@:@home@    | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
-@nginx@.@1@.@r1e3g85tg5g9@:@home@    | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 \end{lstlisting}
 \end{tcolorbox-code}
 
 \begin{itemize}
     \item Сервис: \texttt{nginx}
     \item Реплика: \texttt{1}
-    \item Идентификатор контейнера: \texttt{r1e3g85tg5g9}
+    \item Идентификатор контейнера: \texttt{l1cmmvdtwgrr}
     \item Инстанс: \texttt{home}
 \end{itemize}
 
@@ -199,7 +198,7 @@ $ docker service @logs@ nginx
 
 \begin{tcolorbox-code}
 \begin{lstlisting}[style=base]
-$ docker service ls
+$ docker service @ls@
 ID             NAME      MODE         REPLICAS   IMAGE           PORTS
 l2dmhictze8d   alpine    replicated   @1/1@        alpine:latest   
 3uj6ue7i3836   nginx     replicated   @3/3@        nginx:latest
@@ -242,7 +241,6 @@ w6w7uq1rfhug   nginx           replicated   @5/5@        nginx:latest
 \end{lstlisting}
 \end{tcolorbox-code}
 
-
 \end{frame}
 
 
@@ -283,10 +281,10 @@ $ docker service inspect nginx
 
 \begin{tcolorbox-code}
 \begin{lstlisting}[style=base]
-    $ docker service @update --image=nginx:1.25.5@ nginx
-    1/1: running   [==================================================>] 
-    verify: Service nginx @converged@
-    \end{lstlisting}
+$ docker service update @--image=nginx:1.25.5@ nginx
+1/1: running   [==================================================>] 
+verify: Service nginx @converged@
+\end{lstlisting}
 \end{tcolorbox-code}
 
 \begin{tcolorbox-code}
