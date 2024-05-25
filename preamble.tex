@@ -1,0 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ZHAW BEAMER
+% Preamble
+% 
+% Authors:
+% Martin Oswald
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------
+%   REFERENCES
+%----------------------------------------
+\usepackage[
+    backend=biber,
+    sorting=none,
+    style=ieee
+]{biblatex}
+\usepackage{csquotes}
+\addbibresource{sources.bib}
+
+%----------------------------------------
+%   FLOATS
+%----------------------------------------
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{graphicx}
+
+%----------------------------------------
+%   CAPTIONS
+%----------------------------------------
+\usepackage{caption}
+\usepackage[subrefformat=parens]{subcaption}
+\setbeamertemplate{caption}[numbered]
+\captionsetup{justification=centering}
+
+%----------------------------------------
+%   SET THEME
+%----------------------------------------
+\makeatletter
+  \def\beamer@calltheme#1#2#3{%
+    \def\beamer@themelist{#2}
+    \@for\beamer@themename:=\beamer@themelist\do
+    {\usepackage[{#1}]{\beamer@themelocation/#3\beamer@themename}}}
+
+  \def\usefolder#1{
+    \def\beamer@themelocation{#1}
+  }
+  \def\beamer@themelocation{}
+  
+\usefolder{zhawbeamer}
+\usetheme{zhaw}
+
+%----------------------------------------
+%   CUSTOM PACKAGES
+%----------------------------------------
+% \usepackage{showframe}

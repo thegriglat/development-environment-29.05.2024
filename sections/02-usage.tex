@@ -1,0 +1,21 @@
+\section{Usage}\label{sec:usage}
+
+\begin{frame}[fragile]{Инициализация кластера}
+
+    \begin{lstlisting}[style=base]
+    $ docker swarm init 
+    \end{lstlisting}
+
+    \begin{lstlisting}[style=base]
+
+Swarm initialized: current node (r3ozii9s3hhwsv03p79gqzieb) is now a manager.
+
+    To add a worker to this swarm, run the following command:
+
+docker swarm join --token @SWMTKN-1-0q5ehdrl1649kfbpkma9ss5s1nlw1wvcmhuj1pcnnqnkquf9b9-8ftp1oriocxj9f50xi90wgj9z 192.168.0.103:2377@
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+    \end{lstlisting}
+
+\end{frame}

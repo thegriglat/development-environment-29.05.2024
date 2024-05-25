@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ZHAW BEAMER
+% Main
+% 
+% Authors:
+% Martin Oswald
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------
+%   DOCUMENT SPECIFICATION
+%----------------------------------------
+\documentclass[
+	10pt,
+	xcolor=x11names,
+	aspectratio=169,
+	% notes
+	% notes=only
+]{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage{listings}
+\lstdefinestyle{base}{
+	language=bash,
+	emptylines=1,
+	breaklines=true,
+	basicstyle=\ttfamily\color{white},
+	moredelim=**[is][\color{red}]{@}{@},
+	backgroundcolor = \color{black},
+	frame=ltb,
+	framerule=0pt,
+}
+
+%----------------------------------------
+%   PREAMBLE: PACKAGES AND CONFIGURATIONS
+%----------------------------------------
+\input{preamble}
+
+%----------------------------------------
+%   REPORT INFORMATION
+%----------------------------------------
+
+\title{Системы контейнеризации}
+\subtitle{Docker Swarm}
+\author{Латышев Григорий}
+\date{29.05.2024}
+
+% footer
+\lfooter{left footer}
+\mfooter{Umbrella IT}
+
+%----------------------------------------
+%   TITLEPAGE
+%----------------------------------------
+\begin{document}
+\frame[plain]{\titlepage}
+
+%----------------------------------------
+%   TOC
+%----------------------------------------
+\begin{frame}{Содержание}
+	\tableofcontents
+\end{frame}
+
+%----------------------------------------
+%   MAIN CONTENT
+%----------------------------------------
+
+\input{sections/01-introduction}
+\input{sections/02-usage}
+
+%----------------------------------------
+\end{document}
